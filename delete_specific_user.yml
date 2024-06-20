@@ -1,0 +1,21 @@
+---
+- name: Manage users on Linux
+  hosts: all
+  become: yes
+  vars:
+    target_user: "specific_user"
+
+  tasks:
+    - name: Retrieve all users
+      command: getent passwd
+      register: passwd_output
+
+    - name: Check if target user exists
+      set_fact:
+        user_exists: "{{ passwd_output.stdout.find(target_user) != -1 }}"
+
+    - name: Delete the target user if exists
+      user:
+        name: "{{ target_user }}"
+        state: absent
+      when: user_exists
