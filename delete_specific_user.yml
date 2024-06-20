@@ -3,7 +3,7 @@
   hosts: all
   become: yes
   vars:
-    target_user: "specific_user"
+    target_user: "amr1"
 
   tasks:
     - name: Retrieve all users
