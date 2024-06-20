@@ -1,0 +1,33 @@
+---
+- name: Manage users on Linux
+  hosts: all
+  become: yes
+  vars:
+    target_users: 
+      - "specific_user1"
+      - "specific_user2"
+      - "root"
+
+  tasks:
+    - name: Retrieve all users
+      command: getent passwd
+      register: passwd_output
+      # The getent command is available on most Linux distributions.
+
+    - name: Extract usernames
+      set_fact:
+        all_users: "{{ passwd_output.stdout.split('\n') | map('split', ':') | map('first') }}"
+      # This parsing method works with the standard passwd file format, which is consistent across most distributions.
+
+    - name: Filter users to delete
+      set_fact:
+        users_to_delete: "{{ all_users | difference(target_users) }}"
+      # Exclude the target users from deletion.
+
+    - name: Delete all users except target_users
+      user:
+        name: "{{ item }}"
+        state: absent
+      loop: "{{ users_to_delete }}"
+      ignore_errors: yes
+      # The Ansible user module is distribution-agnostic.
