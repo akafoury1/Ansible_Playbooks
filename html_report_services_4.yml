@@ -1,0 +1,78 @@
+---
+- name: Collect services running on Linux hosts and generate HTML report
+  hosts: all
+  become: yes
+  gather_facts: no
+  vars:
+    report_file: "/var/lib/awx/services_report.html"  # Path where Ansible Tower can write files
+
+  tasks:
+    - name: Collect services status
+      command: systemctl list-units --type=service --no-pager --no-legend
+      register: services_output
+      ignore_errors: yes
+
+    - name: Create or update services data file for each host
+      copy:
+        content: |
+          {% for line in services_output.stdout_lines %}
+            {{ line }}
+          {% endfor %}
+        dest: "/tmp/{{ inventory_hostname }}_services.txt"
+
+    - name: Ensure local temp directory exists
+      local_action:
+        module: file
+        path: "/tmp/services_data"
+        state: directory
+      run_once: true
+
+    - name: Collect services data from all hosts
+      fetch:
+        src: "/tmp/{{ inventory_hostname }}_services.txt"
+        dest: "/tmp/services_data/"
+        flat: yes
+
+    - name: Build services data dictionary
+      run_once: true
+      block:
+        - name: Read all services data files
+          find:
+            paths: "/tmp/services_data"
+            patterns: "*_services.txt"
+          register: files
+
+        - name: Read content of services data files
+          set_fact:
+            services_files_content: "{{ lookup('file', item.path) }}"
+          loop: "{{ files.files }}"
+          register: services_files
+
+        - name: Combine services data into a dictionary
+          set_fact:
+            services_data: >-
+              {{
+                dict(
+                  (item.item.path | basename | regex_replace('_services.txt$', ''), item.ansible_facts.services_files_content.split('\n'))
+                  for item in services_files.results
+                )
+              }}
+
+    - name: Generate HTML report from template
+      template:
+        src: templates/report.html.j2
+        dest: "{{ report_file }}"
+      run_once: true
+      delegate_to: localhost
+
+    - name: Clean up temporary files on local machine
+      local_action:
+        module: file
+        path: "/tmp/services_data"
+        state: absent
+      run_once: true
+
+    - name: Notify about the report location
+      debug:
+        msg: "Services report generated at {{ report_file }}"
+      run_once: true
