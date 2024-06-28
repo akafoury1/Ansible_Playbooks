@@ -2,6 +2,7 @@
 - name: Manage users on Linux
   hosts: all
   become: yes
+  gather_facts: false
   vars:
     target_user: "amr1"
 
