@@ -1,0 +1,72 @@
+---
+- name: Upgrade AKS Cluster and Rollback if Test Fails
+  hosts: localhost
+  gather_facts: no
+  vars:
+    resource_group: "myResourceGroup"
+    aks_cluster: "myAKSCluster"
+    agent_pool: "myAgentPool"
+    aks_upgrade_version: "1.25.2"  # Target AKS Kubernetes version
+    aks_current_version: "1.24.0"  # Original version to roll back to
+
+  tasks:
+
+    - name: Check current Kubernetes version of the agent pool
+      azure_rm_aksagentpool_info:
+        resource_group: "{{ resource_group }}"
+        name: "{{ agent_pool }}"
+        managed_cluster: "{{ aks_cluster }}"
+      register: agentpool_info
+
+    - name: Display current agent pool version
+      debug:
+        msg: "Current AKS agent pool version is: {{ agentpool_info.agentPools[0].orchestratorVersion }}"
+
+    - name: Upgrade the AKS agent pool to target version
+      azure_rm_aksagentpool:
+        resource_group: "{{ resource_group }}"
+        name: "{{ agent_pool }}"
+        managed_cluster: "{{ aks_cluster }}"
+        orchestrator_version: "{{ aks_upgrade_version }}"
+      register: upgrade_result
+      when: agentpool_info.agentPools[0].orchestratorVersion != aks_upgrade_version
+
+    - name: Wait for the upgrade to complete
+      pause:
+        minutes: 5
+      when: upgrade_result is changed
+
+    - name: Run application test script to validate the upgrade
+      shell: ./test_application_health.sh
+      register: test_result
+      ignore_errors: yes
+
+    - name: Check if application test passed
+      fail:
+        msg: "Application testing failed after AKS upgrade."
+      when: test_result.rc != 0
+
+    - name: Rollback to the original AKS version if the test fails
+      azure_rm_aksagentpool:
+        resource_group: "{{ resource_group }}"
+        name: "{{ agent_pool }}"
+        managed_cluster: "{{ aks_cluster }}"
+        orchestrator_version: "{{ aks_current_version }}"
+      when: test_result.rc != 0
+      register: rollback_result
+
+    - name: Wait for the rollback to complete
+      pause:
+        minutes: 5
+      when: rollback_result is changed
+
+    - name: Notify rollback success
+      debug:
+        msg: "AKS rollback completed. The agent pool is now on version {{ aks_current_version }}"
+      when: rollback_result is changed
+
+    - name: Notify upgrade success
+      debug:
+        msg: "AKS upgrade was successful!"
+      when: test_result.rc == 0
+
