@@ -9,4 +9,60 @@
         resource_group: "myAKSResourceGroup2e9442"
         name: "myAKSCluster2e9442"
         kubernetes_version: "1.30.3"
+        dnsPrefix: "myAKSClust-myAKSResourceGro-a61464"
+        agentPoolProfiles: 
+        [
+          {
+            "availabilityZones": null,
+            "capacityReservationGroupId": null,
+            "count": 1,
+            "creationData": null,
+            "currentOrchestratorVersion": "1.29.7",
+            "enableAutoScaling": false,
+            "enableEncryptionAtHost": false,
+            "enableFips": false,
+            "enableNodePublicIp": false,
+            "enableUltraSsd": false,
+            "gpuInstanceProfile": null,
+            "hostGroupId": null,
+            "kubeletConfig": null,
+            "kubeletDiskType": "OS",
+            "linuxOsConfig": null,
+            "maxCount": null,
+            "maxPods": 110,
+            "minCount": null,
+            "mode": "System",
+            "name": "nodepool1",
+            "networkProfile": null,
+            "nodeImageVersion": "AKSUbuntu-2204gen2containerd-202409.04.0",
+            "nodeLabels": null,
+            "nodePublicIpPrefixId": null,
+            "nodeTaints": null,
+            "orchestratorVersion": "1.29",
+            "osDiskSizeGb": 128,
+            "osDiskType": "Managed",
+            "osSku": "Ubuntu",
+            "osType": "Linux",
+            "podSubnetId": null,
+            "powerState": {
+              "code": "Running"
+            },
+            "provisioningState": "Succeeded",
+            "proximityPlacementGroupId": null,
+            "scaleDownMode": null,
+            "scaleSetEvictionPolicy": null,
+            "scaleSetPriority": null,
+            "spotMaxPrice": null,
+            "tags": null,
+            "type": "VirtualMachineScaleSets",
+            "upgradeSettings": {
+              "drainTimeoutInMinutes": null,
+              "maxSurge": "10%",
+              "nodeSoakDurationInMinutes": null
+            },
+            "vmSize": "Standard_DS2_v2",
+            "windowsProfile": null,
+            "workloadRuntime": null
+          }
+        ]  
         state: present
