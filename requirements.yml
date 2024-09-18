@@ -1,4 +1,2 @@
 collections:
   - name: azure.azcollection
-python_requirements:
-  - azure-storage-blob==12.8.0
