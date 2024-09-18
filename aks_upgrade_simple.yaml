@@ -1,3 +1,4 @@
+---
 - name: Upgrade Azure AKS Cluster
   hosts: localhost
   tasks:
