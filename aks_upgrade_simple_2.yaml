@@ -9,8 +9,8 @@
         resource_group: "myAKSResourceGroup2e9442"
         name: "myAKSCluster2e9442"
         kubernetes_version: "1.30.3"
-        dnsPrefix: "myAKSClust-myAKSResourceGro-a61464"
-        agentPoolProfiles: 
+        dns_prefix: "myAKSClust-myAKSResourceGro-a61464"
+        agent_pool_profiles: 
           - name: "nodepool1"
             count: 1
             vm_size: "Standard_DS2_v2"
