@@ -1,0 +1,19 @@
+---
+- name: Upgrade Azure AKS Cluster
+  hosts: localhost
+  collections:
+    - azure.azcollection
+  tasks:
+    - name: Upgrade AKS cluster version
+      azure.azcollection.azure_rm_aks:
+        resource_group: "myAKSResourceGroup2e9442"
+        name: "myAKSCluster2e9442"
+        kubernetes_version: "1.30.3"
+        dnsPrefix: "myAKSClust-myAKSResourceGro-a61464"
+        agentPoolProfiles: 
+          - name: "nodepool1"
+            count: 1
+            vm_size: "Standard_DS2_v2"
+            os_type: "Linux"
+            os_disk_size_gb: 128
+        state: present
