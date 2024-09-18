@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Service Health Report</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid black;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .green {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .orange {
+            background-color: #FFA500;
+            color: white;
+        }
+        .red {
+            background-color: #f44336;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h1>Service Health Report</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Service Name</th>
+                <th>URL</th>
+                <th>Status Code</th>
+                <th>Response Time (s)</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for service in service_results %}
+            <tr class="{{ service.status }}">
+                <td>{{ service.name }}</td>
+                <td><a href="{{ service.url }}">{{ service.url }}</a></td>
+                <td>{{ service.status_code }}</td>
+                <td>{{ service.response_time }}</td>
+                <td>{{ service.status }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
