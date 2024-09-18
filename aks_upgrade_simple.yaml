@@ -1,6 +1,8 @@
 ---
 - name: Upgrade Azure AKS Cluster
   hosts: localhost
+  collections:
+    - azure.azcollection
   tasks:
     - name: Upgrade AKS cluster version
       azure.azcollection.azure_rm_aks:
