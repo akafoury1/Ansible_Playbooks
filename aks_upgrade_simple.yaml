@@ -3,7 +3,7 @@
   tasks:
     - name: Upgrade AKS cluster version
       azure.azcollection.azure_rm_aks:
-        resource_group: "<your-resource-group>"
-        name: "<your-cluster-name>"
+        resource_group: "myAKSResourceGroup2e9442"
+        name: "myAKSCluster2e9442"
         kubernetes_version: "1.30.3"
         state: present
