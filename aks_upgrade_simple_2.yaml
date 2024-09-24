@@ -6,10 +6,10 @@
   tasks:
     - name: Upgrade AKS cluster version
       azure.azcollection.azure_rm_aks:
-        resource_group: "myAKSResourceGroup2e9442"
-        name: "myAKSCluster2e9442"
+        resource_group: "myAKSResourceGroupe55117"
+        name: "myAKSClustere55117"
         kubernetes_version: "1.30.3"
-        dns_prefix: "myAKSClust-myAKSResourceGro-a61464"
+        dns_prefix: "myAKSClust-myAKSResourceGro-408895"
         agent_pool_profiles: 
           - name: "nodepool1"
             count: 1
