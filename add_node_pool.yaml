@@ -1,16 +1,16 @@
 ---
-- name: Upgrade Azure AKS Cluster
+- name: Add new Node Pool to AKS Cluster
   hosts: localhost
   collections:
     - azure.azcollection
   tasks:
-    - name: Upgrade AKS cluster version
+    - name: Add new Node Pool to AKS Cluster
       azure.azcollection.azure_rm_aksagentpool:
         resource_group: "myAKSResourceGroupe55117"
         cluster_name: "myAKSClustere55117_2"
         name: "nodepool1"
         vm_size: "Standard_DS2_v2"  # VM size for the new nodes
-        node_count: 1  # Initial number of nodes in the pool
+        count: 1  # Initial number of nodes in the pool
         os_type: Linux  # OS type of the node pool
         mode: System  # Mode of the node pool (User or System)
         orchestrator_version: "1.29"  # Kubernetes version for the node pool
