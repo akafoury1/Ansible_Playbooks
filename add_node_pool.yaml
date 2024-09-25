@@ -5,7 +5,7 @@
     - azure.azcollection
   tasks:
     - name: Upgrade AKS cluster version
-      azure.azcollection.azure_rm_aks_nodepool:
+      azure.azcollection.azure_rm_aksagentpool:
         resource_group: "myAKSResourceGroupe55117"
         cluster_name: "myAKSClustere55117_2"
         name: "nodepool1"
