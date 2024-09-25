@@ -1,6 +1,8 @@
 ---
 - name: Add a new node pool to AKS cluster
   hosts: localhost
+  collections:
+    - azure.azcollection
   gather_facts: false
   tasks:
     - name: Add a new node pool to the AKS cluster
