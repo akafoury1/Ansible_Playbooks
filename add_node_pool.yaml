@@ -1,11 +1,10 @@
 ---
-- name: Add a new node pool to AKS cluster
+- name: Upgrade Azure AKS Cluster
   hosts: localhost
   collections:
     - azure.azcollection
-  gather_facts: false
   tasks:
-    - name: Add a new node pool to the AKS cluster
+    - name: Upgrade AKS cluster version
       azure.azcollection.azure_rm_aks_nodepool:
         resource_group: "myAKSResourceGroupe55117"
         cluster_name: "myAKSClustere55117_2"
