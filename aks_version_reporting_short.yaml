@@ -1,0 +1,36 @@
+---
+- name: Get AKS clusters and node pools information
+  hosts: localhost
+  gather_facts: false
+  vars:
+    resource_group: "myResourceGroup"  # Change this to your resource group name
+
+  tasks:
+    # Task 1: Gather all AKS clusters in the specified resource group
+    - name: List all AKS clusters in the resource group
+      azure.azcollection.azure_rm_aks_info:
+        resource_group: "{{ resource_group }}"
+      register: aks_clusters
+
+    # Task 2: Display raw aks_clusters output for debugging (optional)
+    - name: Display raw aks_clusters output for debugging
+      debug:
+        var: aks_clusters
+
+    # Task 3: Extract AKS cluster names and Kubernetes versions using json_query
+    - name: Extract AKS cluster names and versions including agent pool profiles
+      set_fact:
+        aks_cluster_info: >
+          {{
+            aks_clusters.aks | json_query('[].{name: name, kubernetes_version: orchestrator_version, location: location, agent_pool_profiles: agent_pool_profiles}')
+          }}
+
+    # Task 4: Display Kubernetes version and node pool information for each AKS cluster
+    - name: Display Kubernetes version and node pool information for each AKS cluster
+      debug:
+        msg: >
+          Cluster: {{ item.name }} (Location: {{ item.location }}) has Kubernetes version: {{ item.kubernetes_version }}.
+          Node Pools: {{ item.agent_pool_profiles | json_query('[].{name: name, kubernetes_version: orchestrator_version}') }}
+      loop: "{{ aks_cluster_info }}"
+      loop_control:
+        label: "{{ item.name }}"
