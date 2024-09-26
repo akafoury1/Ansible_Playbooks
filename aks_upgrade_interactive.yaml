@@ -8,7 +8,7 @@
       azure.azcollection.azure_rm_aks:
         resource_group: "{{ resource_group }}"
         name: "{{ cluster_name }}"
-        kubernetes_version: "1.30.3"
+        kubernetes_version: "{{ kuberenetes_version }}"
         dns_prefix: "{{ dns_prefix }}"
         agent_pool_profiles: 
           - name: "nodepool1"
