@@ -8,7 +8,7 @@
       azure.azcollection.azure_rm_aksagentpool:
         resource_group: "myAKSResourceGroupe55117"
         cluster_name: "myAKSClustere55117_2"
-        name: "nodepool1"
+        name: "nodepool2"
         vm_size: "Standard_DS2_v2"  # VM size for the new nodes
         count: 1  # Initial number of nodes in the pool
         os_type: Linux  # OS type of the node pool
