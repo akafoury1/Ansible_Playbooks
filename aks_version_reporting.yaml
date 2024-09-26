@@ -47,11 +47,10 @@
       set_fact:
         filtered_node_pools: >-
           {{
-            node_pools.results
-            | map(attribute='aks_agent_pools')
-            | zip(aks_cluster_names)
-            | map('combine', {'cluster_name': '{{ item.1 }}'})
-            | map('json_query', '[].{node_pool_name: name, kubernetes_version: orchestrator_version}')
+           node_pools.results
+           | zip(aks_cluster_names)
+           | map('combine', {'cluster_name': item[1]})
+           | map('json_query', '[].{node_pool_name: name, kubernetes_version: orchestrator_version}')
           }}
 
     # Task 7: Display filtered node pool information
