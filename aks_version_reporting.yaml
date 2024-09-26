@@ -26,7 +26,7 @@
 
     # Task 3: Get node pool details for each AKS cluster and display the versions
     - name: Get node pools for each AKS cluster
-      azure.azcollection.azure_rm_aksagentpool_facts:
+      azure.azcollection.azure_rm_aksagentpool_info:
         resource_group: "{{ resource_group }}"
         cluster_name: "{{ item.name }}"
       loop: "{{ aks_clusters.aks_clusters }}"
