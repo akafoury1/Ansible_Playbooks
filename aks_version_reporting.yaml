@@ -12,24 +12,29 @@
         resource_group: "{{ resource_group }}"
       register: aks_clusters
 
-    # Task 2: Extract the 'name' attribute of each AKS cluster and store in an array
+    # Task 2: Display raw aks_clusters output for debugging (optional)
+    - name: Display raw aks_clusters output for debugging
+      debug:
+        var: aks_clusters
+
+    # Task 3: Extract AKS cluster names using json_query
     - name: Extract AKS cluster names
       set_fact:
-        aks_cluster_names: "{{ aks_clusters.aks_clusters | json_query('[].name') }}"
-    
+        aks_cluster_names: "{{ aks_clusters.azure_aks | json_query('[].name') }}"
+
     - name: Display the AKS cluster names array
       debug:
         var: aks_cluster_names
 
-    # Task 3: Display the Kubernetes version for each AKS cluster using the filtered list
+    # Task 4: Display Kubernetes version for each AKS cluster using the filtered list
     - name: Display Kubernetes version for each AKS cluster
       debug:
-        msg: "Cluster: {{ item.name }} has Kubernetes version: {{ item.kubernetes_version }}"
-      loop: "{{ aks_clusters.aks_clusters }}"
+        msg: "Cluster: {{ item.name }} is located in: {{ item.location }}"
+      loop: "{{ aks_clusters.azure_aks }}"
       loop_control:
         label: "{{ item.name }}"
 
-    # Task 4: Get node pool details for each AKS cluster in the filtered list
+    # Task 5: Get node pools for each AKS cluster
     - name: Get node pools for each AKS cluster
       azure.azcollection.azure_rm_aksagentpool_info:
         resource_group: "{{ resource_group }}"
@@ -37,7 +42,8 @@
       loop: "{{ aks_cluster_names }}"
       register: node_pools
 
-    - name: Display the Kubernetes version for each node pool in each AKS cluster
+    # Task 6: Display Kubernetes version for each node pool in each AKS cluster
+    - name: Display Kubernetes version for each node pool in each AKS cluster
       debug:
         msg: |
           Cluster: {{ item.item }} 
