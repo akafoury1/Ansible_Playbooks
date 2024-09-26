@@ -1,0 +1,25 @@
+---
+- name: Add new Node Pool to AKS Cluster
+  hosts: localhost
+  collections:
+    - azure.azcollection
+  tasks:
+    - name: Add new Node Pool to AKS Cluster
+      azure.azcollection.azure_rm_aksagentpool:
+        resource_group: "{{ resource_group }}"
+        cluster_name: "{{ cluster_name }}"
+        name: "{{ node_pool_name }}"
+        vm_size: "Standard_DS2_v2"  # VM size for the new nodes
+        count: 1  # Initial number of nodes in the pool
+        os_type: Linux  # OS type of the node pool
+        mode: System  # Mode of the node pool (User or System)
+        orchestrator_version: "1.29"  # Kubernetes version for the node pool
+        enable_auto_scaling: true  # Enable autoscaling for the node pool
+        min_count: 1  # Minimum node count for autoscaling
+        max_count: 5  # Maximum node count for autoscaling
+        state: present
+      register: nodepool_result
+
+    - name: Display the result
+      debug:
+        var: nodepool_result
