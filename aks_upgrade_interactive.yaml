@@ -9,7 +9,7 @@
         resource_group: "{{ resource_group }}"
         name: "{{ cluster_name }}"
         kubernetes_version: "{{ kuberenetes_version }}"
-        dns_prefix: "{{ dns_prefix }}"
+        dns_prefix: "myAKSClust-myAKSResourceGro-408895"
         agent_pool_profiles: 
           - name: "nodepool1"
             count: 1
