@@ -42,13 +42,16 @@
       loop: "{{ aks_cluster_names }}"
       register: node_pools
 
-    # Task 6: Display Kubernetes version for each node pool in each AKS cluster
-    - name: Display Kubernetes version for each node pool in each AKS cluster
+    # Task 6: Filter and extract relevant node pool information using json_query
+    - name: Extract node pool details for each AKS cluster
+      set_fact:
+        filtered_node_pools: >-
+          {{
+            node_pools.results
+            | json_query('[].aksagentpools[*].{cluster_name: item, node_pool_name: name, kubernetes_version: orchestrator_version}')
+          }}
+
+    # Task 7: Display filtered node pool information
+    - name: Display filtered node pool information
       debug:
-        msg: |
-          Cluster: {{ item.item }} 
-          Node Pools:
-          {% for pool in item.aksagentpools %}
-            - Node Pool: {{ pool.name }}, Kubernetes Version: {{ pool.orchestrator_version }}
-          {% endfor %}
-      loop: "{{ node_pools.results }}"
+        var: filtered_node_pools
