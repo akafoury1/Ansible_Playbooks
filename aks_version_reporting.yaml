@@ -30,7 +30,7 @@
     - name: Display Kubernetes version for each AKS cluster
       debug:
         msg: "Cluster: {{ item.name }} is located in: {{ item.location }}"
-      loop: "{{ aks_clusters.azure_aks }}"
+      loop: "{{ aks_clusters.aks }}"
       loop_control:
         label: "{{ item.name }}"
 
