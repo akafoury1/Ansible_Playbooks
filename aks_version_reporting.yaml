@@ -3,7 +3,7 @@
   hosts: localhost
   gather_facts: false
   vars:
-    resource_group: "myResourceGroup"  # Change to your resource group name
+    resource_group: "myResourceGroup"  # Change this to your resource group name
 
   tasks:
     # Task 1: Gather all AKS clusters in the specified resource group
@@ -12,32 +12,35 @@
         resource_group: "{{ resource_group }}"
       register: aks_clusters
 
-    - name: Display the AKS clusters found in the resource group
+    # Task 2: Extract the 'name' attribute of each AKS cluster and store in an array
+    - name: Extract AKS cluster names
+      set_fact:
+        aks_cluster_names: "{{ aks_clusters.aks_clusters | json_query('[].name') }}"
+    
+    - name: Display the AKS cluster names array
       debug:
-        var: aks_clusters
+        var: aks_cluster_names
 
-    # Task 2: Loop through each AKS cluster to get the Kubernetes version and node pools
-    - name: Display the Kubernetes version for each AKS cluster
+    # Task 3: Display the Kubernetes version for each AKS cluster using the filtered list
+    - name: Display Kubernetes version for each AKS cluster
       debug:
         msg: "Cluster: {{ item.name }} has Kubernetes version: {{ item.kubernetes_version }}"
       loop: "{{ aks_clusters.aks_clusters }}"
       loop_control:
         label: "{{ item.name }}"
 
-    # Task 3: Get node pool details for each AKS cluster and display the versions
+    # Task 4: Get node pool details for each AKS cluster in the filtered list
     - name: Get node pools for each AKS cluster
       azure.azcollection.azure_rm_aksagentpool_info:
         resource_group: "{{ resource_group }}"
-        cluster_name: "{{ item.name }}"
-      loop: "{{ aks_clusters.aks_clusters }}"
-      loop_control:
-        label: "{{ item.name }}"
+        cluster_name: "{{ item }}"
+      loop: "{{ aks_cluster_names }}"
       register: node_pools
 
     - name: Display the Kubernetes version for each node pool in each AKS cluster
       debug:
         msg: |
-          Cluster: {{ item.item.name }} 
+          Cluster: {{ item.item }} 
           Node Pools:
           {% for pool in item.aksagentpools %}
             - Node Pool: {{ pool.name }}, Kubernetes Version: {{ pool.orchestrator_version }}
