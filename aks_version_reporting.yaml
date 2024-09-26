@@ -8,7 +8,7 @@
   tasks:
     # Task 1: Gather all AKS clusters in the specified resource group
     - name: List all AKS clusters in the resource group
-      azure.azcollection.azure_rm_aks_facts:
+      azure.azcollection.azure_rm_aks_info:
         resource_group: "{{ resource_group }}"
       register: aks_clusters
 
