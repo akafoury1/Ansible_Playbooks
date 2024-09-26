@@ -1,0 +1,11 @@
+---
+- name: Delete AKS Node Pool
+  hosts: localhost
+  collections:
+    - azure.azcollection
+  tasks:
+    - name: Delete AKS Node Pool
+      azure.azcollection.azure_rm_aksagentpool:
+        resource_group: "{{ resource_group }}"
+        cluster_name: "{{ cluster_name }}"
+        name: "{{ node_pool_name }}"
