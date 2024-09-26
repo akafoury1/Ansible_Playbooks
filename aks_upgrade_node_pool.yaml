@@ -1,0 +1,18 @@
+---
+- name: Upgrade AKS Node Pool
+  hosts: localhost
+  collections:
+    - azure.azcollection
+  tasks:
+    - name: Upgrade AKS Node Pool
+      azure.azcollection.azure_rm_aksagentpool:
+        resource_group: "myAKSResourceGroupe55117"
+        cluster_name: "myAKSClustere55117_2"
+        name: "nodepool2"
+        orchestrator_version: "1.30.3"
+        state: present
+      register: nodepool_result
+
+    - name: Display the result
+      debug:
+        var: nodepool_result
