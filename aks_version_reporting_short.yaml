@@ -22,7 +22,7 @@
       set_fact:
         aks_cluster_info: >
           {{
-            aks_clusters.aks | json_query('[].{name: name, kubernetes_version: orchestrator_version, location: location, agent_pool_profiles: agent_pool_profiles}')
+            aks_clusters.aks | json_query('[].{name: name, kubernetes_version: kubernetes_version, location: location, agent_pool_profiles: agent_pool_profiles}')
           }}
 
     # Task 4: Display Kubernetes version and node pool information for each AKS cluster
