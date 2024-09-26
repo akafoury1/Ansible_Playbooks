@@ -29,7 +29,7 @@
     # Task 4: Display Kubernetes version for each AKS cluster using the filtered list
     - name: Display Kubernetes version for each AKS cluster
       debug:
-        msg: "Cluster: {{ item.name }} is located in: {{ item.location }}"
+        msg: "Cluster: {{ item.name }} is on kuberenets version in: {{ item.current_kubernetes_version }}"
       loop: "{{ aks_clusters.aks }}"
       loop_control:
         label: "{{ item.name }}"
