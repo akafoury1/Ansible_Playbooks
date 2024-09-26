@@ -20,7 +20,7 @@
     # Task 3: Extract AKS cluster names using json_query
     - name: Extract AKS cluster names
       set_fact:
-        aks_cluster_names: "{{ aks_clusters.azure_aks | json_query('[].name') }}"
+        aks_cluster_names: "{{ aks_clusters.aks | json_query('[].name') }}"
 
     - name: Display the AKS cluster names array
       debug:
