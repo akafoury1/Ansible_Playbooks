@@ -48,7 +48,7 @@
         filtered_node_pools: >-
           {{
             node_pools.results
-            | json_query('[].aksagentpools[*].{cluster_name: item, node_pool_name: name, kubernetes_version: orchestrator_version}')
+            | json_query('[].aks_agent_pools[*].{cluster_name: item, node_pool_name: name, kubernetes_version: orchestrator_version}')
           }}
 
     # Task 7: Display filtered node pool information
