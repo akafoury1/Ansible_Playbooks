@@ -8,7 +8,7 @@
       azure.azcollection.azure_rm_aks:
         resource_group: "myAKSResourceGroupe55117"
         name: "myAKSClustere55117"
-        kubernetes_version: "1.30.3"
+        kubernetes_version: "1.30.4"
         dns_prefix: "myAKSClust-myAKSResourceGro-408895"
         agent_pool_profiles: 
           - name: "nodepool1"
